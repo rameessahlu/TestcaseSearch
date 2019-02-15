@@ -43,12 +43,12 @@ class TestCases:
             #pprint(data)
         helpers.bulk(self.es, data)
 
-    def match_search(self, tc_name_keyword):
-        res = self.es.search(index='test_cases', body={'from': 0, 'size': 0, 'query':{'match': {'name': tc_name_keyword}} })
+    def match_search(self, tc_index, tc_name_keyword):
+        res = self.es.search(index=tc_index, body={'query':{'match': {'name': tc_name_keyword}} })
         return res
 
-    def match_phrase_search(self, tc_name_keyword):
-        res = self.es.search(index='test_cases', body={'from': 0, 'size': 0, 'query':{'match_phrase': {'name': tc_name_keyword}} })
+    def match_phrase_search(self, tc_index, tc_name_keyword):
+        res = self.es.search(index=tc_index, body={'query':{'match_phrase': {'name': tc_name_keyword}} })
         '''
         sample query
         'query': {
@@ -68,6 +68,6 @@ class TestCases:
         '''
         return res
 
-    def match_term_search(self, tc_name_keyword):
-        res = self.es.search(index='test_cases', body={'from': 0, 'size': 0, 'query':{'term': {'name': tc_name_keyword}} })
+    def match_term_search(self, tc_index, tc_name_keyword):
+        res = self.es.search(index=tc_index, body={'query':{'term': {'name': tc_name_keyword}}})
         return res
