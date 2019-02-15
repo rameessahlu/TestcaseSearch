@@ -8,25 +8,30 @@ class TestCases:
     def __init__(self, es):
         self.es = es
 
-    def create_indice(self):
-        #creating an index
+    def create_indice(self, index_name):
+        """creating an index"""
         print('Indice "test_cases" created!')
-        self.es.indices.create(index='test_cases', ignore=400)
+        self.es.indices.create(index=index_name, ignore=400)
 
     def create_tc_mapping(self):
-        #if we are not satisfied with the auto mapping done by the elasticsearch
+        """if we are not satisfied with the auto mapping done by the elasticsearch"""
         self.es.indices.put_mapping(
             index= 'test_cases',
             doc_type= 'test_case',
             body={}
         )
 
+    def check_index_existense(self, name):
+        if self.es.indices.exists(index=name):
+            return True
+        return False
+
     def get_tc_mapping(self):
         result = self.es.indices.get_mapping(index='test_cases', doc_type='test_case')
         pprint(result)
 
-    def delete_indice(self):
-        self.es.indices.delete(index='test_cases')
+    def delete_indice(self, name):
+        self.es.indices.delete(index=name)
 
     def tc_insertion(self, file_name):
         #doc1 = {'id':1, 'name': '', 'designedBy': '', 'description': '', 'dependencies':'', 'data': '', 'exp_result': '', 'priority': '', 'steps': [] }
@@ -66,44 +71,3 @@ class TestCases:
     def match_term_search(self, tc_name_keyword):
         res = self.es.search(index='test_cases', body={'from': 0, 'size': 0, 'query':{'term': {'name': tc_name_keyword}} })
         return res
-
-if __name__ == '__main__':
-    es = Elasticsearch(
-        ['', '', ''],
-        scheme="http",
-        port=9200,
-    )
-    tc = TestCases(es)
-    #tc.delete_indice()
-    #tc.create_indice()
-    #tc.tc_insertion('data/test_cases.json')
-
-    if not es.indices.exists(index='test_cases'):
-        tc.create_indice()
-
-    pprint(tc.es.search(index='test_cases',  doc_type='test_case',
-    body={
-        'from': 0,
-        'size': 100,
-        'query': {
-            'match': { 'name': 'unplug'
-                #'name': {
-                    #'value': 'he-had'#, 'flags' : 'INTERSECTION|COMPLEMENT|EMPTY',
-                    #'max_determinized_states': 20000
-                 #}
-             }
-         }
-    }))
-
-
-
-
-    '''
-    "bool": {
-  "filter": {
-    "exists": {
-      "field": "field2"
-    }
-  }
-}
-'''
