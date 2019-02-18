@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Cloud</title>
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
+
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/jquery-ui.js"></script>
+
+	<script type="text/javascript">
+		
+		var univ={
+			search_anim_toggle:false,
+			theme_anim_toggle:false,
+			theme_toggle:false,
+			tags:[]
+		};
+	</script>
+</head>
+<body class="theme_change">
+	<header>
+		<div class="sub_head_cont theme_change_cont">
+			<div class="slide_toggle">
+				<div class="line"></div>
+				<div class="circle"></div>
+			</div>
+			<span class="theme_change">Light or Dark Theme</span>
+		</div>
+		<div class="sub_head_cont search_form_cont">
+			<form>
+				<label for="searchtext"></label>
+				<input type="text" name="searchtext" id="searchtext" placeholder="What are you looking for?" required class="theme_change">
+				<button type="submit" ><img src="image\search_black_icon.png" alt="search icon" class="but_search_icon theme_change"></button>
+			</form>
+		</div>
+	</header>
+	<section>
+		<div class="search_result_cont theme_change">
+			<pre>
+			</pre>
+		</div>
+	</section>
+	<div class="loader">
+		<img src="image/loader.gif">
+	</div>
+	<script type="text/javascript" src="js/app.js"></script>
+	<script type="text/javascript" src="js/ajax.js"></script>
+	<script type="text/javascript">
+		
+		$(function(){
+
+			$('.loader').hide();
+
+			$('form').on("submit",function(e){
+				e.preventDefault();
+
+				$('.loader').show();
+
+				$("header").animate({"height":"20em"},1000);
+				$(".search_result_cont").removeClass("search_result_cont_show");
+				$(".search_result_cont>pre").html("");
+
+				var query=$('#searchtext').val().trim();
+
+				//console.log(query);
+
+				requestAjax({data:{'query':query}});
+				
+				//console.log(univ.tags);
+
+				//console.log("Prevented");
+			});
+
+			$('.slide_toggle').on("click",function(){
+				//console.log("clicked");
+
+				if(!univ.theme_toggle){
+					$(".but_search_icon").attr({"src":"image\\search_white_icon.png"});
+					univ.theme_toggle=true;
+				}
+				else{
+					$(".but_search_icon").attr({"src":"image\\search_black_icon.png"});	
+					univ.theme_toggle=false;
+				}
+				
+				$('.theme_change').toggleClass("dark_theme")
+
+				if(!univ.theme_anim_toggle){
+					$(".circle").animate({"left":"60%"},100,"linear",function(){
+						univ.theme_anim_toggle=true;
+					});
+				}
+				else{
+					$(".circle").animate({"left":"0%"},100,"linear",function(){
+						univ.theme_anim_toggle=false;
+					});	
+				}
+			});
+
+		});
+	</script>
+</body>
+</html>
