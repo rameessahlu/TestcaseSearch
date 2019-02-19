@@ -94,6 +94,7 @@ section{
 }
 .search_form_cont>form>button>img{
 	height: 80%;
+	width: 3em;
 }
 .search_result_cont{
 	display: flex;

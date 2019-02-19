@@ -14,7 +14,8 @@
 			search_anim_toggle:false,
 			theme_anim_toggle:false,
 			theme_toggle:false,
-			tags:[]
+			tags:new Set(),
+			xhr:null
 		};
 	</script>
 </head>
@@ -96,6 +97,24 @@
 						univ.theme_anim_toggle=false;
 					});	
 				}
+			});
+
+			$('#searchtext').on('keyup',function(){
+
+				var time = this._time;
+				console.log("time: "+time);
+				var timestamp = new Date().getTime();
+
+				if ((timestamp - time)>1000){ // if duration is more than 1000ms 
+					console.log(timestamp - time);
+					
+					var query=$(this).val().trim();
+
+
+					requestAjax({data:{'query':query},isSuggestion:true});
+				}
+
+				this._time = timestamp;
 			});
 
 		});
